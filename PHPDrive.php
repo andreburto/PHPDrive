@@ -6,6 +6,7 @@ class PHPDrive {
     public $FILE;
     public $CONN;
     public $ERRMSG;
+    
     // The SQL used below
     protected $SELECTALL = "SELECT * FROM fs WHERE FILE = '%s' ORDER BY UPDATED DESC";
     protected $SELECTONE = "SELECT * FROM fs WHERE FILE = '%s' ORDER BY UPDATED DESC LIMIT 1";
@@ -79,7 +80,7 @@ class PHPDrive {
                 $this->ERRMSG = "Sqlite2 query failed";
                 return false;
             }
-            if ($res->numRows() == 0) {
+            if (sqlite_num_rows($res) === 0) {
                 $this->ERRMSG = "Sqlite2 returned no results";
                 return false;
             }

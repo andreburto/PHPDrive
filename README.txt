@@ -19,5 +19,4 @@ PHPDrive is presented as-is without warranty or support.
 
 TO DO
 
-1. Test "sqlite" code.
-2. Include "mysqli" support.
+1. Include "mysqli" support.
