@@ -16,10 +16,7 @@ class PHPDriveSqlite implements IPHPDriveDatabase {
     public $ERRMSG;
 
     function __construct() { }
-
-    function __destruct() {
-        if (isset($this->CONN)) { $this->CloseConn(); }
-    }
+    function __destruct() { }
 
     public function WriteQuery($sql=null) {
         $res = sqlite_exec($this->CONN, $sql);
@@ -62,10 +59,7 @@ class PHPDriveSqlite3 implements IPHPDriveDatabase {
     public $ERRMSG;
 
     function __construct() { }
-
-    function __destruct() {
-        if (isset($this->CONN)) { $this->CloseConn(); }
-    }
+    function __destruct() { }
 
     public function WriteQuery($sql=null) {
         $res = $this->CONN->exec($sql);
@@ -98,7 +92,7 @@ class PHPDriveSqlite3 implements IPHPDriveDatabase {
     }
 
     public function OpenConn($database=null) {
-        $this->CONN = new Sqlite3($this->FILE, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
+        $this->CONN = new Sqlite3($database, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
     }
 }
 

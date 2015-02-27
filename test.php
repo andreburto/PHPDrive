@@ -62,10 +62,23 @@ function test7() {
     return check_test($pd->DeleteFile("test"), true, "Could not delete");
 }
 
-// Initialize
-$pd = new PHPDrive();
+// TEST SET 1
+$pd = new PHPDrive("test1", PHPDRIVE_SQLITE);
 $count = 0;
+printf("Test sqlite\n");
+// Perform tests
+while(true) {
+    $count++;
+    $f = sprintf("test%s", $count);
+    if (function_exists($f) == false) { break; }
+    call_user_func($f);
+}
 
+
+// TEST SET 2
+$pd = new PHPDrive("test2", PHPDRIVE_SQLITE3);
+$count = 0;
+printf("Test Sqlite3\n");
 // Perform tests
 while(true) {
     $count++;
