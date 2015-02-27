@@ -1,5 +1,66 @@
 <?php
 
+interface IPHPDriveDatabase {
+    public function WriteQuery($sql=null);
+    public function ReadQuery($sql=null);
+    public function OpenConn($db=null);
+    public function CloseConn();
+}
+
+class PHPDriveSqlite implements IPHPDriveDatabase {
+    public $CONN;
+    public $ERRMSG;
+
+    protected $SELECTALL = "SELECT * FROM fs WHERE FILE = '%s' ORDER BY UPDATED DESC";
+    protected $SELECTONE = "SELECT * FROM fs WHERE FILE = '%s' ORDER BY UPDATED DESC LIMIT 1";
+    protected $CREATE = "CREATE TABLE fs (FILE TEXT,DATA TEXT,CREATED DATETIME,UPDATED DATETIME)";
+    protected $INSERT = "INSERT INTO fs (FILE,DATA,CREATED,UPDATED) VALUES ('%s','%s',%s,%s)";
+    protected $DELETE = "DELETE FROM fs WHERE FILE = '%s'";
+
+    function __construct($database=null) {
+
+    }
+
+    function __destruct() {
+        if (isset($this->CONN)) { $this->CloseConn(); }
+    }
+
+    public function WriteQuery($sql=null) {
+        $res = sqlite_exec($this->CONN, $sql);
+        if ($res == false) {
+            $this->ERRMSG = "Sqlite2 could not write data";
+            return false;
+        }
+        return $res;
+    }
+
+    public function ReadQuery($sql=null) {
+        $rows = array();
+        $res = sqlite_query($this->CONN, $sql, SQLITE_ASSOC, $this->ERRMSG);
+        if (isset($this->ERRMSG)) { return false; }
+        if ($res == false) {
+            $this->ERRMSG = "Sqlite2 query failed";
+            return false;
+        }
+        if (sqlite_num_rows($res) === 0) {
+            $this->ERRMSG = "Sqlite2 returned no results";
+            return false;
+        }
+        while($row = sqlite_fetch_array($res, SQLITE_ASSOC)) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
+    public function OpenConn($db=null) {
+        $this->CONN = sqlite_open($db, 0666);
+    }
+
+    public function CloseConn() {
+        sqlite_close($this->CONN);
+    }
+}
+
 class PHPDrive {
     // Class-wide variables
     public $TYPE;
