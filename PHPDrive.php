@@ -1,9 +1,11 @@
 <?php
 
+// Makes it easier than passing strings
 define("PHPDRIVE_SQLITE", 1);
 define("PHPDRIVE_SQLITE3", 2);
 define("PHPDRIVE_MYSQLI", 3);
 
+// The interface to use for all databases PHPDrive cann access
 interface IPHPDriveDatabase {
     public function WriteQuery($sql=null);
     public function ReadQuery($sql=null);
@@ -11,6 +13,7 @@ interface IPHPDriveDatabase {
     public function OpenConn($database=null);
 }
 
+// Sqlite2 class
 class PHPDriveSqlite implements IPHPDriveDatabase {
     public $CONN;
     public $ERRMSG;
@@ -54,6 +57,7 @@ class PHPDriveSqlite implements IPHPDriveDatabase {
     }
 }
 
+// Sqlite3 class
 class PHPDriveSqlite3 implements IPHPDriveDatabase {
     public $CONN;
     public $ERRMSG;
@@ -163,6 +167,10 @@ class PHPDrive {
             return false;
         }
         $rows = $this->DBOBJ->ReadQuery(sprintf($this->SELECTALL, $name));
+        if ($rows == false) {
+            $this->ERRMSG = $this->DBOBJ->ERRMSG;
+            return false;
+        }
         return $rows;
     }
     
@@ -172,6 +180,10 @@ class PHPDrive {
             return false;
         }
         $rows = $this->DBOBJ->ReadQuery(sprintf($this->SELECTONE, $name));
+        if ($rows == false) {
+            $this->ERRMSG = $this->DBOBJ->ERRMSG;
+            return false;
+        }
         return $rows[0];
     }
     

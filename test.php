@@ -62,6 +62,9 @@ function test7() {
     return check_test($pd->DeleteFile("test"), true, "Could not delete");
 }
 
+// Start
+printf("Test begun: %s\n", date("Y-m-d H:i:s"));
+
 // TEST SET 1
 $pd = new PHPDrive("test1", PHPDRIVE_SQLITE);
 $count = 0;
